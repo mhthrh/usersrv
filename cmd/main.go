@@ -42,7 +42,10 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	logger := l.NewLogger(logName)
-	defer logger.LogSync()
+	defer func(){
+		cancel()
+		logger.LogSync()
+	}() 
 
 	logger.Info(ctx, "Loading config...")
 
@@ -101,5 +104,4 @@ func main() {
 
 	logger.Info(ctx, "stopping user service...")
 
-	cancel()
 }
