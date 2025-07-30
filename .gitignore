@@ -1,2 +1,4 @@
 ./cmd/usersrv
 .idea
+# Added by goreleaser init:
+dist/
