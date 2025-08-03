@@ -14,7 +14,7 @@ import (
 
 type User struct {
 	userGrpc.UnimplementedUserServiceServer
-	logr logger.ILogger
+	lgr logger.ILogger
 }
 
 var (
@@ -25,14 +25,14 @@ func New(l logger.ILogger) User {
 	srv = service.New(l)
 	return User{
 		UnimplementedUserServiceServer: userGrpc.UnimplementedUserServiceServer{},
-		logr:                           l,
+		lgr:                            l,
 	}
 }
 
 func (u User) Create(ctx context.Context, in *userGrpc.UserRequest) (*emptypb.Empty, error) {
-	u.logr.Info(ctx, "start grpc create", zap.Any("in user parameters", in))
+	u.lgr.Info(ctx, "start grpc create", zap.Any("in user parameters", in))
 
-	u.logr.Info(ctx, "start service create calling")
+	u.lgr.Info(ctx, "start service create calling")
 
 	err := srv.Create(ctx, &user.User{
 		FirstName:   in.FirstName,
@@ -42,17 +42,17 @@ func (u User) Create(ctx context.Context, in *userGrpc.UserRequest) (*emptypb.Em
 		UserName:    in.UserName,
 		Password:    in.Password,
 	})
-	u.logr.Info(ctx, "get response from service create user", zap.Any("response", err))
+	u.lgr.Info(ctx, "get response from service create user", zap.Any("response", err))
 	return &emptypb.Empty{}, status.Errorf(xErrors.GetGrpcCode(err), "%s", xErrors.Yaml(err))
 }
 
 func (u User) GetByUserName(ctx context.Context, in *userGrpc.UserName) (*userGrpc.UserResponse, error) {
-	u.logr.Info(ctx, "start grpc GetByUserName", zap.Any("in user parameters", in))
+	u.lgr.Info(ctx, "start grpc GetByUserName", zap.Any("in user parameters", in))
 
-	u.logr.Info(ctx, "start service create calling")
+	u.lgr.Info(ctx, "start service create calling")
 	usr, err := srv.GetByUserName(ctx, in.Username)
 
-	u.logr.Info(ctx, "get response from service create user", zap.Any("response", err), zap.Any("user info", usr))
+	u.lgr.Info(ctx, "get response from service create user", zap.Any("response", err), zap.Any("user info", usr))
 
 	if err.Code != xErrors.SuccessCode {
 		return nil, status.Errorf(xErrors.GetGrpcCode(err), "%s", xErrors.Yaml(err))
@@ -69,9 +69,9 @@ func (u User) GetByUserName(ctx context.Context, in *userGrpc.UserName) (*userGr
 }
 
 func (u User) Update(ctx context.Context, in *userGrpc.UserRequest) (*emptypb.Empty, error) {
-	u.logr.Info(ctx, "start grpc Update", zap.Any("in user parameters", in))
+	u.lgr.Info(ctx, "start grpc Update", zap.Any("in user parameters", in))
 
-	u.logr.Info(ctx, "start service Update calling")
+	u.lgr.Info(ctx, "start service Update calling")
 
 	err := srv.Update(ctx, &user.User{
 		FirstName:   in.FirstName,
@@ -81,18 +81,18 @@ func (u User) Update(ctx context.Context, in *userGrpc.UserRequest) (*emptypb.Em
 		UserName:    in.UserName,
 		Password:    in.Password,
 	})
-	u.logr.Info(ctx, "get response from service update user", zap.Any("response", err))
+	u.lgr.Info(ctx, "get response from service update user", zap.Any("response", err))
 
 	return &emptypb.Empty{}, status.Errorf(xErrors.GetGrpcCode(err), "%s", xErrors.Yaml(err))
 }
 
 func (u User) Remove(ctx context.Context, in *userGrpc.UserName) (*emptypb.Empty, error) {
-	u.logr.Info(ctx, "start grpc remove", zap.Any("in user parameters", in))
+	u.lgr.Info(ctx, "start grpc remove", zap.Any("in user parameters", in))
 
-	u.logr.Info(ctx, "start service remove calling")
+	u.lgr.Info(ctx, "start service remove calling")
 	err := srv.Remove(ctx, in.Username)
 
-	u.logr.Info(ctx, "get response from service Remove user", zap.Any("response", err))
+	u.lgr.Info(ctx, "get response from service Remove user", zap.Any("response", err))
 
 	return &emptypb.Empty{}, status.Errorf(xErrors.GetGrpcCode(err), "%s", xErrors.Yaml(err))
 }

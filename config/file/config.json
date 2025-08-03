@@ -48,5 +48,15 @@
       "host": "0.0.0.0",
       "port": 8586
     }
-  ]
+  ],
+  "hydra": {
+    "adminUrl": "http://localhost:4445",
+    "publicUrl": "http://localhost/api/v1/auth",
+    "clientID": "981649f0-e2a8-4594-a887-96d6fa4f3929",
+    "clientSecret": "lI9mLM4MEz6h-_~unDtgEwyWy3",
+    "oauth2AuthUrl": "http://localhost/api/v1/auth/oauth2/auth",
+    "oauth2TokenUrl": "http://localhost/api/v1/auth/oauth2/token",
+    "redirectURL": "http://localhost/callback",
+    "loginURL": "http://localhost:8000/login"
+  }
 }
